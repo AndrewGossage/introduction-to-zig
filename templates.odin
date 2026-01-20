@@ -7,6 +7,8 @@ import "core:strings"
 
 Card :: struct {
     id: string,
+    title: string,
+    body: string,
     code_path: string,
 }
   
@@ -49,7 +51,7 @@ print_card :: proc(card: Card) -> string {
     builder := strings.builder_make()
     defer strings.builder_destroy(&builder)
     
-    fmt.sbprintf(&builder, template, card.id, content)
+    fmt.sbprintf(&builder, template, card.id, card.title, card.body, content)
     
     return strings.clone(strings.to_string(builder))
 }

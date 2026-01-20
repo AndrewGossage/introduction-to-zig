@@ -1,1 +1,2 @@
-server
+.zig-out
+.zig-cache
