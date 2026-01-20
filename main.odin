@@ -8,12 +8,13 @@ main :: proc() {
     builder := strings.builder_make()
     cards: []Card = {
         {"hello", "Hello World", "this is the body", "./zig/hello-01.zig"},
-        {"hello2", "Hello World 2", "", "./zig/hello-02.zig"}
+        {"hello2", "Hello World 2", "", "./zig/hello-02.zig"},
+        {"meta", "Meta Programming", "Comptime Magic",  "./zig/meta-01.zig"}
+
     }
     for card in cards {
         result1 := print_card(card)
         strings.write_string(&builder, result1)
-
     }
     defer strings.builder_destroy(&builder)
     result := strings.to_string(builder);

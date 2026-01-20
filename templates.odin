@@ -45,14 +45,12 @@ print_card :: proc(card: Card) -> string {
     }
     defer delete(snippet)
     
-    content := string(snippet)
-    template := string(cardSnippet)
+    result := string(cardSnippet)
+    result,ok = strings.replace_all(result, "{{ID}}", card.id)
+    result,ok = strings.replace_all(result, "{{TITLE}}", card.title)
+    result,ok = strings.replace_all(result, "{{BODY}}", card.body)
+    result,ok = strings.replace_all(result, "{{CONTENT}}", string(snippet))
+    result,ok = strings.replace_all(result, "{{CODE_PATH}}", card.code_path)
     
-    builder := strings.builder_make()
-    defer strings.builder_destroy(&builder)
-    
-    fmt.sbprintf(&builder, template, card.id, card.title, card.body, content)
-    
-    return strings.clone(strings.to_string(builder))
+    return result
 }
-
