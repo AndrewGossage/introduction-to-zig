@@ -12,11 +12,11 @@ Card :: struct {
     code_path: string,
 }
   
-print_body :: proc(snippet: string) -> string {
+print_body :: proc(snippet: string) -> (string, bool) {
     bodySnippet, ok := os.read_entire_file("./body.html")
     if !ok {
         fmt.eprintln("Failed to read body")
-        return ""
+        return "", false
     }
     defer delete(bodySnippet)
     
@@ -27,21 +27,21 @@ print_body :: proc(snippet: string) -> string {
     
     fmt.sbprintf(&builder, template, snippet)
     
-    return strings.clone(strings.to_string(builder))
+    return strings.clone(strings.to_string(builder)), true
 }
 
-print_card :: proc(card: Card) -> string {
+print_card :: proc(card: Card) -> (string, bool) {
     cardSnippet, ok1 := os.read_entire_file("./card.html")
     if !ok1 {
         fmt.eprintln("Failed to read card")
-        return ""
+        return "", false
     }
     defer delete(cardSnippet)
     
     snippet, ok := os.read_entire_file(card.code_path)
     if !ok {
         fmt.eprintln("Failed to read file")
-        return ""
+        return "", false
     }
     defer delete(snippet)
     
@@ -52,5 +52,5 @@ print_card :: proc(card: Card) -> string {
     result,ok = strings.replace_all(result, "{{CONTENT}}", string(snippet))
     result,ok = strings.replace_all(result, "{{CODE_PATH}}", card.code_path)
     
-    return result
+    return result, true
 }
