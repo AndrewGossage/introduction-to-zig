@@ -1,0 +1,34 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="stylesheet" href="/static/global.css" />
+
+        <meta name="viewport" content="width=device-width" />
+        <title>Intro 2 Zig</title>
+    </head>
+    <body>
+        <main>
+            <div class="bg"></div>
+            <div class="stars"></div>
+            {{CONTENT}}
+        </main>
+
+        <script src="/static/highlight.js"></script>
+        <script>
+            (async () => {
+                let lastModified = await (await fetch('/modified')).json();
+                setInterval(async () => {
+                    console.log('checking for changes');
+                    let currentModified = await (
+                        await fetch('/modified')
+                    ).json();
+                    if (currentModified.value !== lastModified.value) {
+                        location.reload();
+                    }
+                    lastModified = currentModified;
+                }, 3000);
+            })();
+        </script>
+    </body>
+</html>

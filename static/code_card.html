@@ -1,0 +1,41 @@
+<section class="section" id="{{ID}}">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">{{TITLE}}</div>
+            <div style="font-size: 1rem">{{BODY}}</div>
+
+            <pre
+                class="code"
+            ><code class="snippet" id="snippet" >{{CONTENT}}</code></pre>
+            <pre
+                class="code"
+                style="height: 15vh"
+            ><code class="snippet results-box" id="output-{{ID}}"></code></pre>
+            <button style="margin: auto; font-size: 1.3rem">Execute</button>
+        </div>
+        <script>
+            document
+                .querySelector('#{{ID}} button')
+                .addEventListener('click', async function () {
+                    const content = `{{CONTENT}}`;
+                    let command = 'cd ../ && ';
+                    if (content.startsWith('//')) {
+                        command += content.split('\n')[0].replace('//', '');
+                    } else {
+                        command += 'zig run {{CODE_PATH}}';
+                    }
+                    const response = await fetch('/api/exec', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            request: command,
+                        }),
+                    });
+                    const result = await response.text();
+                    document.querySelector('#output-{{ID}}').innerText =
+                        '\n' +
+                        result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
+                });
+        </script>
+    </div>
+</section>
