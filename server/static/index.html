@@ -94,6 +94,8 @@ pub fn main(init: std.process.Init) !void {
 
 `;
                     let command = 'cd ../ && ';
+                    document.querySelector('#output-hello').innerText = '';
+
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
@@ -163,6 +165,8 @@ pub fn main(init: std.process.Init) !void {
 }
 `;
                     let command = 'cd ../ && ';
+                    document.querySelector('#output-hello2').innerText = '';
+
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
@@ -186,7 +190,7 @@ pub fn main(init: std.process.Init) !void {
 <section class="section" id="linking-c">
     <div class="slide-container">
         <div class="slide">
-            <div style="font-size: 2rem">Using C Code</div>
+            <div style="font-size: 2rem">Interfacing With C</div>
             <div style="font-size: 1rem">part 1</div>
 
             <pre
@@ -232,6 +236,8 @@ pub fn main(init: std.process.Init) void {
 
 `;
                     let command = 'cd ../ && ';
+                    document.querySelector('#output-linking-c').innerText = '';
+
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
@@ -255,7 +261,7 @@ pub fn main(init: std.process.Init) void {
 <section class="section" id="linking-c2">
     <div class="slide-container">
         <div class="slide">
-            <div style="font-size: 2rem">Using C Code</div>
+            <div style="font-size: 2rem">Interfacing With C</div>
             <div style="font-size: 1rem">part 2</div>
 
             <pre
@@ -307,6 +313,8 @@ export fn add(a: c_int, b: c_int) c_int {
 // }
 `;
                     let command = 'cd ../ && ';
+                    document.querySelector('#output-linking-c2').innerText = '';
+
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
@@ -321,6 +329,214 @@ export fn add(a: c_int, b: c_int) c_int {
                     });
                     const result = await response.text();
                     document.querySelector('#output-linking-c2').innerText =
+                        '\n' +
+                        result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
+                });
+        </script>
+    </div>
+</section>
+<section class="section" id="web-client">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Web Client</div>
+            <div style="font-size: 1rem"></div>
+
+            <pre
+                class="code"
+            ><code class="snippet" id="snippet" >const std = @import("std");
+
+pub fn main(init: std.process.Init) !void {
+    var arena = init.arena;
+    defer _ = arena.reset(.free_all);
+    const allocator = arena.allocator();
+    const resp = try fetch(allocator, init.io, "http://127.0.0.1:8082");
+    std.debug.print("{s}\n", .{resp});
+}
+
+
+fn fetch(allocator: std.mem.Allocator, io: std.Io, path: []const u8) ![]const u8 {
+    
+    var client: std.http.Client = .{
+        .allocator = allocator,
+        .io = io,
+        .now = try std.Io.Clock.real.now(io),
+    };
+
+    try client.ca_bundle.rescan(client.allocator, io, client.now.?);
+    defer client.deinit();
+    
+    var result_body = std.Io.Writer.Allocating.init(allocator);
+    defer result_body.deinit();
+    
+    const response = try client.fetch(.{
+        .location = .{ .url = path },
+        .method = .GET, // get is default 
+        .response_writer = &result_body.writer,
+    });
+    
+    if (response.status.class() != .success) {
+        return error.HttpRequestFailed;
+    }
+    
+    return try allocator.dupe(u8, result_body.written());
+}
+
+
+</code></pre>
+            <pre
+                class="code"
+                style="height: 15vh"
+            ><code class="snippet results-box" id="output-web-client"></code></pre>
+            <button style="margin: auto; font-size: 1.3rem">Execute</button>
+        </div>
+        <script>
+            document
+                .querySelector('#web-client button')
+                .addEventListener('click', async function () {
+                    const content = `const std = @import("std");
+
+pub fn main(init: std.process.Init) !void {
+    var arena = init.arena;
+    defer _ = arena.reset(.free_all);
+    const allocator = arena.allocator();
+    const resp = try fetch(allocator, init.io, "http://127.0.0.1:8082");
+    std.debug.print("{s}\n", .{resp});
+}
+
+
+fn fetch(allocator: std.mem.Allocator, io: std.Io, path: []const u8) ![]const u8 {
+    
+    var client: std.http.Client = .{
+        .allocator = allocator,
+        .io = io,
+        .now = try std.Io.Clock.real.now(io),
+    };
+
+    try client.ca_bundle.rescan(client.allocator, io, client.now.?);
+    defer client.deinit();
+    
+    var result_body = std.Io.Writer.Allocating.init(allocator);
+    defer result_body.deinit();
+    
+    const response = try client.fetch(.{
+        .location = .{ .url = path },
+        .method = .GET, // get is default 
+        .response_writer = &result_body.writer,
+    });
+    
+    if (response.status.class() != .success) {
+        return error.HttpRequestFailed;
+    }
+    
+    return try allocator.dupe(u8, result_body.written());
+}
+
+
+`;
+                    let command = 'cd ../ && ';
+                    document.querySelector('#output-web-client').innerText = '';
+
+                    if (content.startsWith('//')) {
+                        command += content.split('\n')[0].replace('//', '');
+                    } else {
+                        command += 'zig run ./zig/client.zig';
+                    }
+                    const response = await fetch('/api/exec', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            request: command,
+                        }),
+                    });
+                    const result = await response.text();
+                    document.querySelector('#output-web-client').innerText =
+                        '\n' +
+                        result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
+                });
+        </script>
+    </div>
+</section>
+<section class="section" id="web-server">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Web server</div>
+            <div style="font-size: 1rem"></div>
+
+            <pre
+                class="code"
+            ><code class="snippet" id="snippet" >const std = @import("std");
+
+pub fn main(init: std.process.Init) !void {
+    try listen( init.io);
+}
+
+fn listen(io: std.Io) !void {
+    const addr: std.Io.net.IpAddress = try .resolve(io, "127.0.0.1", 8082);
+    var tcp_server = try addr.listen(io, .{});
+    var recv_buffer: [1024]u8 = undefined;
+    var send_buffer: [1024]u8 = undefined;
+    while (true) {
+        var stream = try tcp_server.accept(io);
+        var connection_reader = stream.reader(io, &recv_buffer);
+        var connection_writer = stream.writer(io, &send_buffer);
+        var server: std.http.Server = .init(&connection_reader.interface, &connection_writer.interface);
+        var request = try server.receiveHead();
+        const header: std.http.Header = .{ .name = "Content-Type", .value = "application/json" };
+        try request.respond("{\"message\":\"success\"}", .{ .extra_headers = &.{header} });
+    }
+    return;
+}
+</code></pre>
+            <pre
+                class="code"
+                style="height: 15vh"
+            ><code class="snippet results-box" id="output-web-server"></code></pre>
+            <button style="margin: auto; font-size: 1.3rem">Execute</button>
+        </div>
+        <script>
+            document
+                .querySelector('#web-server button')
+                .addEventListener('click', async function () {
+                    const content = `const std = @import("std");
+
+pub fn main(init: std.process.Init) !void {
+    try listen( init.io);
+}
+
+fn listen(io: std.Io) !void {
+    const addr: std.Io.net.IpAddress = try .resolve(io, "127.0.0.1", 8082);
+    var tcp_server = try addr.listen(io, .{});
+    var recv_buffer: [1024]u8 = undefined;
+    var send_buffer: [1024]u8 = undefined;
+    while (true) {
+        var stream = try tcp_server.accept(io);
+        var connection_reader = stream.reader(io, &recv_buffer);
+        var connection_writer = stream.writer(io, &send_buffer);
+        var server: std.http.Server = .init(&connection_reader.interface, &connection_writer.interface);
+        var request = try server.receiveHead();
+        const header: std.http.Header = .{ .name = "Content-Type", .value = "application/json" };
+        try request.respond("{\"message\":\"success\"}", .{ .extra_headers = &.{header} });
+    }
+    return;
+}
+`;
+                    let command = 'cd ../ && ';
+                    document.querySelector('#output-web-server').innerText = '';
+
+                    if (content.startsWith('//')) {
+                        command += content.split('\n')[0].replace('//', '');
+                    } else {
+                        command += 'zig run ./zig/server.zig';
+                    }
+                    const response = await fetch('/api/exec', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            request: command,
+                        }),
+                    });
+                    const result = await response.text();
+                    document.querySelector('#output-web-server').innerText =
                         '\n' +
                         result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
                 });
@@ -446,6 +662,8 @@ inline fn convert_name(comptime T: type) [@typeName(T).len]u8 {
 
 `;
                     let command = 'cd ../ && ';
+                    document.querySelector('#output-meta').innerText = '';
+
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {

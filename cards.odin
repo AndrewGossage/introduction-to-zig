@@ -23,8 +23,11 @@ cards :[]Card: {
     {.HTML, "site", "What is Zig", "", "./slides/site.html"},
     {.CODE, "hello", "Hello World", "this is the body", "./zig/hello-01.zig"},
     {.CODE, "hello2", "Hello World 2", "", "./zig/hello-02.zig"},
-    {.CODE, "linking-c", "Using C Code", "part 1", "./zig/c.zig"},
-    {.CODE, "linking-c2", "Using C Code", "part 2", "./zig/c-02.zig"},
+    {.CODE, "linking-c", "Interfacing With C", "part 1", "./zig/c.zig"},
+    {.CODE, "linking-c2", "Interfacing With C", "part 2", "./zig/c-02.zig"},
+    {.CODE, "web-client", "Web Client", "", "./zig/client.zig"},
+    {.CODE, "web-server", "Web server", "", "./zig/server.zig"},
+
 
 
     {.CODE, "meta", "Meta Programming", "Comptime Magic", "./zig/meta-01.zig" }

@@ -19,6 +19,8 @@
                 .addEventListener('click', async function () {
                     const content = `{{CONTENT}}`;
                     let command = 'cd ../ && ';
+                    document.querySelector('#output-{{ID}}').innerText = '';
+
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
