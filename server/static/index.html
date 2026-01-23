@@ -1,0 +1,490 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="stylesheet" href="/static/global.css" />
+
+        <meta name="viewport" content="width=device-width" />
+        <title>Intro 2 Zig</title>
+    </head>
+    <body>
+        <main>
+            <div class="bg"></div>
+            <div class="stars"></div>
+            <section class="section" id="intro">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Introduction to Zig</div>
+            <div style="font-size: 1rem"></div>
+
+            <div>
+    
+
+</div>
+                  
+        </div>
+        <script>
+         
+        </script>
+    </div>
+</section>
+<section class="section" id="site">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">What is Zig</div>
+            <div style="font-size: 1rem"></div>
+
+            <div>
+     <iframe src="https://ziglang.org/" width="800" height="500" style="border:none;"></iframe> 
+
+</div>
+                  
+        </div>
+        <script>
+         
+        </script>
+    </div>
+</section>
+<section class="section" id="hello">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Hello World</div>
+            <div style="font-size: 1rem">this is the body</div>
+
+            <pre
+                class="code"
+            ><code class="snippet" id="snippet" >const std = @import("std");
+const Io = std.Io;
+
+
+pub fn main(init: std.process.Init) !void {
+    const io = init.io;
+    var stdout_buffer: [1024]u8 = undefined;
+    var stdout_file_writer: Io.File.Writer = Io.File.Writer.init(.stdout(), io, &stdout_buffer);
+    const stdout_writer = &stdout_file_writer.interface;
+    try stdout_writer.print("Hello World!\n", .{});
+    try stdout_writer.flush(); // Don't forget to flush!
+}
+
+
+</code></pre>
+            <pre
+                class="code"
+                style="height: 15vh"
+            ><code class="snippet results-box" id="output-hello"></code></pre>
+            <button style="margin: auto; font-size: 1.3rem">Execute</button>
+        </div>
+        <script>
+            document
+                .querySelector('#hello button')
+                .addEventListener('click', async function () {
+                    const content = `const std = @import("std");
+const Io = std.Io;
+
+
+pub fn main(init: std.process.Init) !void {
+    const io = init.io;
+    var stdout_buffer: [1024]u8 = undefined;
+    var stdout_file_writer: Io.File.Writer = Io.File.Writer.init(.stdout(), io, &stdout_buffer);
+    const stdout_writer = &stdout_file_writer.interface;
+    try stdout_writer.print("Hello World!\n", .{});
+    try stdout_writer.flush(); // Don't forget to flush!
+}
+
+
+`;
+                    let command = 'cd ../ && ';
+                    if (content.startsWith('//')) {
+                        command += content.split('\n')[0].replace('//', '');
+                    } else {
+                        command += 'zig run ./zig/hello-01.zig';
+                    }
+                    const response = await fetch('/api/exec', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            request: command,
+                        }),
+                    });
+                    const result = await response.text();
+                    document.querySelector('#output-hello').innerText =
+                        '\n' +
+                        result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
+                });
+        </script>
+    </div>
+</section>
+<section class="section" id="hello2">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Hello World 2</div>
+            <div style="font-size: 1rem"></div>
+
+            <pre
+                class="code"
+            ><code class="snippet" id="snippet" >const std = @import("std");
+const Io = std.Io;
+
+pub fn main(init: std.process.Init) !void {
+    // Prints to stderr, unbuffered, ignoring potential errors.
+    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
+    // This is appropriate for anything that lives as long as the process.
+    const arena: std.mem.Allocator = init.arena.allocator();
+    // Accessing command line arguments:
+    const args = try init.minimal.args.toSlice(arena);
+    for (args) |arg| {
+        std.log.info("arg: {s}", .{arg});
+    }
+}
+</code></pre>
+            <pre
+                class="code"
+                style="height: 15vh"
+            ><code class="snippet results-box" id="output-hello2"></code></pre>
+            <button style="margin: auto; font-size: 1.3rem">Execute</button>
+        </div>
+        <script>
+            document
+                .querySelector('#hello2 button')
+                .addEventListener('click', async function () {
+                    const content = `const std = @import("std");
+const Io = std.Io;
+
+pub fn main(init: std.process.Init) !void {
+    // Prints to stderr, unbuffered, ignoring potential errors.
+    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
+    // This is appropriate for anything that lives as long as the process.
+    const arena: std.mem.Allocator = init.arena.allocator();
+    // Accessing command line arguments:
+    const args = try init.minimal.args.toSlice(arena);
+    for (args) |arg| {
+        std.log.info("arg: {s}", .{arg});
+    }
+}
+`;
+                    let command = 'cd ../ && ';
+                    if (content.startsWith('//')) {
+                        command += content.split('\n')[0].replace('//', '');
+                    } else {
+                        command += 'zig run ./zig/hello-02.zig';
+                    }
+                    const response = await fetch('/api/exec', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            request: command,
+                        }),
+                    });
+                    const result = await response.text();
+                    document.querySelector('#output-hello2').innerText =
+                        '\n' +
+                        result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
+                });
+        </script>
+    </div>
+</section>
+<section class="section" id="linking-c">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Using C Code</div>
+            <div style="font-size: 1rem">part 1</div>
+
+            <pre
+                class="code"
+            ><code class="snippet" id="snippet" >// zig run ./zig/c.zig -lc
+
+const std = @import("std");
+const c = @cImport({
+    @cInclude("stdio.h");
+});
+
+pub fn main(init: std.process.Init) void {
+    _ = init;
+    _ = c.printf("Hello %s %d\n", "world", @as(i8, 4));
+}
+
+
+
+</code></pre>
+            <pre
+                class="code"
+                style="height: 15vh"
+            ><code class="snippet results-box" id="output-linking-c"></code></pre>
+            <button style="margin: auto; font-size: 1.3rem">Execute</button>
+        </div>
+        <script>
+            document
+                .querySelector('#linking-c button')
+                .addEventListener('click', async function () {
+                    const content = `// zig run ./zig/c.zig -lc
+
+const std = @import("std");
+const c = @cImport({
+    @cInclude("stdio.h");
+});
+
+pub fn main(init: std.process.Init) void {
+    _ = init;
+    _ = c.printf("Hello %s %d\n", "world", @as(i8, 4));
+}
+
+
+
+`;
+                    let command = 'cd ../ && ';
+                    if (content.startsWith('//')) {
+                        command += content.split('\n')[0].replace('//', '');
+                    } else {
+                        command += 'zig run ./zig/c.zig';
+                    }
+                    const response = await fetch('/api/exec', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            request: command,
+                        }),
+                    });
+                    const result = await response.text();
+                    document.querySelector('#output-linking-c').innerText =
+                        '\n' +
+                        result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
+                });
+        </script>
+    </div>
+</section>
+<section class="section" id="linking-c2">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Using C Code</div>
+            <div style="font-size: 1rem">part 2</div>
+
+            <pre
+                class="code"
+            ><code class="snippet" id="snippet" >// zig build-obj zig/c-02.zig && zig cc -o program zig/zig.c c-02.o && ./program
+export fn add(a: c_int, b: c_int) c_int {
+    return a + b;
+}
+
+
+// zig.c
+// #include <stdio.h>
+//
+// extern int add(int a, int b);
+//
+// int main(void) {
+//     printf("Hello, World!\n");
+//     int result = add(5, 3);
+//     printf("5 + 3 = %d\n", result);
+//     return 0;
+// }
+</code></pre>
+            <pre
+                class="code"
+                style="height: 15vh"
+            ><code class="snippet results-box" id="output-linking-c2"></code></pre>
+            <button style="margin: auto; font-size: 1.3rem">Execute</button>
+        </div>
+        <script>
+            document
+                .querySelector('#linking-c2 button')
+                .addEventListener('click', async function () {
+                    const content = `// zig build-obj zig/c-02.zig && zig cc -o program zig/zig.c c-02.o && ./program
+export fn add(a: c_int, b: c_int) c_int {
+    return a + b;
+}
+
+
+// zig.c
+// #include <stdio.h>
+//
+// extern int add(int a, int b);
+//
+// int main(void) {
+//     printf("Hello, World!\n");
+//     int result = add(5, 3);
+//     printf("5 + 3 = %d\n", result);
+//     return 0;
+// }
+`;
+                    let command = 'cd ../ && ';
+                    if (content.startsWith('//')) {
+                        command += content.split('\n')[0].replace('//', '');
+                    } else {
+                        command += 'zig run ./zig/c-02.zig';
+                    }
+                    const response = await fetch('/api/exec', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            request: command,
+                        }),
+                    });
+                    const result = await response.text();
+                    document.querySelector('#output-linking-c2').innerText =
+                        '\n' +
+                        result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
+                });
+        </script>
+    </div>
+</section>
+<section class="section" id="meta">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Meta Programming</div>
+            <div style="font-size: 1rem">Comptime Magic</div>
+
+            <pre
+                class="code"
+            ><code class="snippet" id="snippet" >const std = @import("std");
+
+
+pub fn main() !void {
+    gen_ts(Bar);
+}
+
+const Bar = struct {
+    first: i32,
+    second: []const u8,
+    third: bool,
+};
+
+pub fn gen_ts(T: type) void {
+    const name: [@typeName(T).len]u8 = convert_name(T);
+    std.debug.print("interface {s} {{\n", .{name});
+    inline for (@typeInfo(T).@"struct".fields) |field| {
+        std.debug.print("    {s}: {s};\n", .{ field.name, convert_type(field.type) });
+    }
+    std.debug.print("}};\n", .{});
+}
+
+inline fn convert_type(comptime T: type) []const u8 {
+    return switch (@typeInfo(T)) {
+        .@"struct" => &convert_name(T),
+        .int, .float => "number",
+        .bool => "boolean",
+        .pointer => |ptr_info| if (ptr_info.child == u8) "string" else "any[]",
+        else => @compileError("Unsupported type"),
+    };
+}
+
+inline fn convert_name(comptime T: type) [@typeName(T).len]u8 {
+    const tn = @typeName(T);
+    var name: [@typeName(T).len]u8 = undefined;
+    inline for (0..name.len) |i| {
+        if (tn[i] == '.' or tn[i] == '-') {
+            name[i] = '_';
+        } else {
+            name[i] = tn[i];
+        }
+    }
+    return name;
+}
+
+
+
+
+
+</code></pre>
+            <pre
+                class="code"
+                style="height: 15vh"
+            ><code class="snippet results-box" id="output-meta"></code></pre>
+            <button style="margin: auto; font-size: 1.3rem">Execute</button>
+        </div>
+        <script>
+            document
+                .querySelector('#meta button')
+                .addEventListener('click', async function () {
+                    const content = `const std = @import("std");
+
+
+pub fn main() !void {
+    gen_ts(Bar);
+}
+
+const Bar = struct {
+    first: i32,
+    second: []const u8,
+    third: bool,
+};
+
+pub fn gen_ts(T: type) void {
+    const name: [@typeName(T).len]u8 = convert_name(T);
+    std.debug.print("interface {s} {{\n", .{name});
+    inline for (@typeInfo(T).@"struct".fields) |field| {
+        std.debug.print("    {s}: {s};\n", .{ field.name, convert_type(field.type) });
+    }
+    std.debug.print("}};\n", .{});
+}
+
+inline fn convert_type(comptime T: type) []const u8 {
+    return switch (@typeInfo(T)) {
+        .@"struct" => &convert_name(T),
+        .int, .float => "number",
+        .bool => "boolean",
+        .pointer => |ptr_info| if (ptr_info.child == u8) "string" else "any[]",
+        else => @compileError("Unsupported type"),
+    };
+}
+
+inline fn convert_name(comptime T: type) [@typeName(T).len]u8 {
+    const tn = @typeName(T);
+    var name: [@typeName(T).len]u8 = undefined;
+    inline for (0..name.len) |i| {
+        if (tn[i] == '.' or tn[i] == '-') {
+            name[i] = '_';
+        } else {
+            name[i] = tn[i];
+        }
+    }
+    return name;
+}
+
+
+
+
+
+`;
+                    let command = 'cd ../ && ';
+                    if (content.startsWith('//')) {
+                        command += content.split('\n')[0].replace('//', '');
+                    } else {
+                        command += 'zig run ./zig/meta-01.zig';
+                    }
+                    const response = await fetch('/api/exec', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            request: command,
+                        }),
+                    });
+                    const result = await response.text();
+                    document.querySelector('#output-meta').innerText =
+                        '\n' +
+                        result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
+                });
+        </script>
+    </div>
+</section>
+
+        </main>
+
+        <script src="/static/highlight.js"></script>
+        <script>
+            (async () => {
+                let lastModified = await (await fetch('/modified')).json();
+                setInterval(async () => {
+                    console.log('checking for changes');
+                    let currentModified = await (
+                        await fetch('/modified')
+                    ).json();
+                    if (currentModified.value !== lastModified.value) {
+                        location.reload();
+                    }
+                    lastModified = currentModified;
+                }, 3000);
+            })();
+        </script>
+    </body>
+</html>
+

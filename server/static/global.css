@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+:root {
+    --bg: #272727;
+    --blue: #009fb7;
+    --cinnamon-wood: #be6e46ff;
+    --tea-green: #cde7b0ff;
+    --muted-teal: #a3bfa8ff;
+    --slate-grey: #7286a0ff;
+    --ebony: #59594aff;
+    font-family: 'Google Sans', monospace;
+    font-weight: bold;
+
+    /* Create a snapping rule on the html element */
+    scroll-snap-type: y mandatory;
+
+    /* Create a timeline scope, so we can target any element on the page */
+    timeline-scope: --section, --main, --site-header;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  display: none;
+}
+
+button {
+    width: fit-content;
+    padding: 4px 24px;
+    margin-top: 4px;
+    margin-bottom:4pxl
+    font-size: 1.3rem;
+    border-radius: 8px;
+    background: linear-gradient(135deg, black 50%,black 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+button:active {
+    transform: translateY(0);
+}
+.code:hover::-webkit-scrollbar {
+  width: 10px;
+  display: block;
+}
+
+
+.results-box {
+    text-align: left;
+    width: 90%;
+    margin: auto;
+    padding: 1rem;
+    height:20vh;
+    color: #d4d4d4;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    overflow-x: auto;
+    min-height: 3rem;
+    max-height: 20rem;
+    overflow-y: auto;
+}
+
+.results-box code {
+    white-space: pre;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #555;
+
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.section {
+  /* Creating a snapping rule on the section element */
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+
+  /* Attach the timeline to the section element*/
+  view-timeline: --section;
+
+  /* Set each section to the full dynamic height of the viewport */
+  height: 100dvh;
+}
+
+.content {
+  /* Fix the content, so it doesn't scroll with the section */
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+
+  /* Animate the content based on the section scrolling */
+  --contrast: 4;
+  --blur: 0.5rem;
+
+  animation: blink ease-in-out both;
+  animation-timeline: --section;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    filter: blur(var(--blur)) contrast(var(--contrast));
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  50% {
+    filter: blur(0) contrast(1);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.bg {
+    width: 100%;
+    height: 100%;
+
+    position: fixed;
+    top:0px;
+    left:0px;
+    background: white;
+    z-index: -1;
+
+        background: linear-gradient(to bottom, #0b0b2b, #1b2735 70%, #090a0f);
+
+
+}
+
+
+.slide-nav {
+    width: 1px;
+    height: 1px;
+    position: fixed;
+    background: white;
+}
+
+.stars {
+    width: 1px;
+    height: 1px;
+    position: fixed;
+    background: white;
+    z-index: -1;
+    box-shadow:
+        2vw 5vh 2px white,
+        10vw 8vh 2px white,
+        15vw 15vh 1px white,
+        22vw 22vh 1px white,
+        28vw 12vh 2px white,
+        32vw 32vh 1px white,
+        38vw 18vh 2px white,
+        42vw 35vh 1px white,
+        48vw 25vh 2px white,
+        53vw 42vh 1px white,
+        58vw 15vh 2px white,
+        63vw 38vh 1px white,
+        68vw 28vh 2px white,
+        73vw 45vh 1px white,
+        78vw 32vh 2px white,
+        83vw 48vh 1px white,
+        88vw 20vh 2px white,
+        93vw 52vh 1px white,
+        98vw 35vh 2px white,
+        5vw 60vh 1px white,
+        12vw 65vh 2px white,
+        18vw 72vh 1px white,
+        25vw 78vh 2px white,
+        30vw 85vh 1px white,
+        35vw 68vh 2px white,
+        40vw 82vh 1px white,
+        45vw 92vh 2px white,
+        50vw 75vh 1px white,
+        55vw 88vh 2px white,
+        60vw 95vh 1px white,
+        65vw 72vh 2px white,
+        70vw 85vh 1px white,
+        75vw 78vh 2px white,
+        80vw 92vh 1px white,
+        85vw 82vh 2px white,
+        90vw 88vh 1px white,
+        95vw 75vh 2px white;
+    animation: twinkle 8s infinite linear;
+}
+
+body {
+    text-align: center;
+
+    color: white;
+}
+
+
+.slide {
+    aspect-ratio: 16 / 9;
+    width: 70%;
+    border-radius: 1em;
+    background-color: var(--bg);
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 10px;
+    justify-content:start;
+}
+
+.slide-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    align-items: center;
+}
+.code {
+    text-align: left;
+    width: 90%;
+    color: white;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    height: 45vh;
+    overflow:auto;
+    font-weight: bold;
+    font-size: 1.3em;
+    background-color: black;
+    margin: 0 auto;
+    font-family: 'Ubuntu Mono', monospace;
+}
+.keyword {
+    color: var(--cinnamon-wood);
+}
+.builtin {
+    color: var(--cinnamon-wood);
+}
+.string, .string * {
+    color: var(--blue) !important;
+}
+
+.comment, .comment * {
+    color: lightgray !important;
+    font-style: italic;
+}
+
+.fun {
+    color: purple;
+}
+.number {
+    color: var(--cinnamon-wood);
+
+}
+.field {
+    color: purple;
+}
+

@@ -1,4 +1,5 @@
 *.o
 program
 .zig-out
+zig-out
 .zig-cache

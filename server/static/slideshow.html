@@ -1,0 +1,52 @@
+---
+import "../styles/global.css";
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="stylesheet" href="../styles/global.css" />
+
+        <meta name="viewport" content="width=device-width" />
+        <title>Astro</title>
+    </head>
+    <body>
+        <main>
+            <div class="bg"></div>
+            <div class="stars"></div>
+            <section class="section" id="hello">
+    <div class="slide-container">
+        <div class="slide">
+            <h1></h1>
+            <p>The Simplest program in Zig</p>
+            <pre class="code"><code class="snippet" is:raw>const std = @import("std");
+const Io = std.Io;
+
+
+pub fn main(init: std.process.Init) !void {
+    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
+    const arena: std.mem.Allocator = init.arena.allocator();
+    const args = try init.minimal.args.toSlice(arena);
+    for (args) |arg| {
+        std.log.info("arg: {s}", .{arg});
+    }
+    const io = init.io;
+    var stdout_buffer: [1024]u8 = undefined;
+    var stdout_file_writer: Io.File.Writer = Io.File.Writer.init(.stdout(), io, &stdout_buffer);
+    const stdout_writer = &stdout_file_writer.interface;
+    try stdout_writer.flush(); // Don't forget to flush!
+}
+
+</code>
+                </pre>
+        </div>
+    </div>
+</section>
+
+        </main>
+        <script src="../scripts/highlight.js"></script>
+        <script></script>
+    </body>
+</html>
+
