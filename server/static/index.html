@@ -28,28 +28,11 @@
         </script>
     </div>
 </section>
-<section class="section" id="site">
-    <div class="slide-container">
-        <div class="slide">
-            <div style="font-size: 2rem">What is Zig</div>
-            <div style="font-size: 1rem"></div>
-
-            <div>
-     <iframe src="https://ziglang.org/" width="800" height="500" style="border:none;"></iframe> 
-
-</div>
-                  
-        </div>
-        <script>
-         
-        </script>
-    </div>
-</section>
 <section class="section" id="hello">
     <div class="slide-container">
         <div class="slide">
             <div style="font-size: 2rem">Hello World</div>
-            <div style="font-size: 1rem">this is the body</div>
+            <div style="font-size: 1rem">Part 1</div>
 
             <pre
                 class="code"
@@ -119,8 +102,8 @@ pub fn main(init: std.process.Init) !void {
 <section class="section" id="hello2">
     <div class="slide-container">
         <div class="slide">
-            <div style="font-size: 2rem">Hello World 2</div>
-            <div style="font-size: 1rem"></div>
+            <div style="font-size: 2rem">Hello World</div>
+            <div style="font-size: 1rem">Part 2</div>
 
             <pre
                 class="code"
@@ -181,6 +164,71 @@ pub fn main(init: std.process.Init) !void {
                     });
                     const result = await response.text();
                     document.querySelector('#output-hello2').innerText =
+                        '\n' +
+                        result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
+                });
+        </script>
+    </div>
+</section>
+<section class="section" id="hello3">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Hello World</div>
+            <div style="font-size: 1rem">Part 3</div>
+
+            <pre
+                class="code"
+            ><code class="snippet" id="snippet" >const std = @import("std");
+
+pub fn main(init: std.process.Init) !void {
+    const io = init.io;
+    var stdin_buffer: [1024]u8 = undefined;
+    var stdin_reader = std.Io.File.stdin().reader(io, &stdin_buffer);
+    const stdin = &stdin_reader.interface;
+
+    const name = try stdin.takeDelimiterExclusive('\n');
+    _ = name;
+}
+</code></pre>
+            <pre
+                class="code"
+                style="height: 15vh"
+            ><code class="snippet results-box" id="output-hello3"></code></pre>
+            <button style="margin: auto; font-size: 1.3rem">Execute</button>
+        </div>
+        <script>
+            document
+                .querySelector('#hello3 button')
+                .addEventListener('click', async function () {
+                    const content = `const std = @import("std");
+
+pub fn main(init: std.process.Init) !void {
+    const io = init.io;
+    var stdin_buffer: [1024]u8 = undefined;
+    var stdin_reader = std.Io.File.stdin().reader(io, &stdin_buffer);
+    const stdin = &stdin_reader.interface;
+
+    const name = try stdin.takeDelimiterExclusive('\n');
+    _ = name;
+}
+`;
+                    let command = 'cd ../ && ';
+                    document.querySelector('#output-hello3').innerText = '';
+
+                    if (content.startsWith('//')) {
+                        command += content.split('\n')[0].replace('//', '');
+                    } else {
+                        command += 'zig run ./zig/input.zig';
+                    }
+                    const response = await fetch('/api/exec', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            request: command,
+                        }),
+                    });
+                    const result = await response.text();
+                    document.querySelector('#output-hello3').innerText =
                         '\n' +
                         result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
                 });
