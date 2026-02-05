@@ -3,7 +3,7 @@ const std = @import("std");
 const builtin = @import("builtin");
 
 pub fn main() !void {
-    debug("Hello {t}{t}!\n", .{builtin.target.os.tag, builtin.target.cpu.arch});
+    debug("Hello {t}-{t}!\n", .{builtin.target.os.tag, builtin.target.cpu.arch});
     debug("Zig Version {s}\n\n", .{builtin.zig_version_string });
 }
 

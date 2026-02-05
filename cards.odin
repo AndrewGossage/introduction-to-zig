@@ -42,7 +42,7 @@ cards :[]Card: {
     
     {.HTML, "Advanced", "Advanced Topics", "AKA: How to make consts and influence vars", "./slides/pro.html"},
     {.CODE, "meta", "Meta Programming", "Comptime Magic", "./zig/meta-01.zig" },
-    {.CODE, "builtin", "Meta Programming", "Comptime Magic", "./zig/builtin-01.zig" }
+    {.CODE, "builtin", "Builtin", "I heard you like meta programming", "./zig/builtin-01.zig" }
 
 }
 

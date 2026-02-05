@@ -1037,8 +1037,8 @@ inline fn convert_name(comptime T: type) [@typeName(T).len]u8 {
 <section class="section" id="builtin">
     <div class="slide-container">
         <div class="slide">
-            <div style="font-size: 2rem">Meta Programming</div>
-            <div style="font-size: 1rem">Comptime Magic</div>
+            <div style="font-size: 2rem">Builtin</div>
+            <div style="font-size: 1rem">I heard you like meta programming</div>
 
             <pre
                 class="code"
@@ -1047,7 +1047,7 @@ const std = @import("std");
 const builtin = @import("builtin");
 
 pub fn main() !void {
-    debug("Hello {t}{t}!\n", .{builtin.target.os.tag, builtin.target.cpu.arch});
+    debug("Hello {t}-{t}!\n", .{builtin.target.os.tag, builtin.target.cpu.arch});
     debug("Zig Version {s}\n\n", .{builtin.zig_version_string });
 }
 
@@ -1076,7 +1076,7 @@ const std = @import("std");
 const builtin = @import("builtin");
 
 pub fn main() !void {
-    debug("Hello {t}{t}!\n", .{builtin.target.os.tag, builtin.target.cpu.arch});
+    debug("Hello {t}-{t}!\n", .{builtin.target.os.tag, builtin.target.cpu.arch});
     debug("Zig Version {s}\n\n", .{builtin.zig_version_string });
 }
 
