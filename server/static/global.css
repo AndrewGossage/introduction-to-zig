@@ -206,11 +206,13 @@ body {
 
 
 .slide {
-    aspect-ratio: 16 / 9;
-    width: 70%;
+    width: 90%;
+    height: 90vh;
+    min-height: 600px;
     border-radius: 1em;
     background-color: var(--bg);
     margin: auto;
+    margin-top: 5vh;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -221,6 +223,7 @@ body {
 .slide-container {
     display: flex;
     height: 100vh;
+    min-height: 600px;
     width: 100%;
     align-items: center;
 }

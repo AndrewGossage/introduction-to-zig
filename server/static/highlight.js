@@ -19,7 +19,7 @@ function highlight() {
             '<span class="number">$1</span>'
         );
         text = text.replace(
-            /\b(pub|fn|const|void|try|return|inline|comptime|var|switch|struct|T|for|while)\b/g,
+            /\b(pub|fn|const|void|try|return|if|inline|comptime|var|switch|struct|T|for|while)\b/g,
             '<span class="keyword">$1</span>'
         );
         snip.innerHTML = text.trim();
