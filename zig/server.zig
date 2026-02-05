@@ -1,3 +1,5 @@
+//kill $(lsof -i TCP:8082 | awk 'NR==2 {print $2}') 2>/dev/null; cd zig && zig run server.zig & echo "listening on port 8082"
+
 const std = @import("std");
 
 pub fn main(init: std.process.Init) !void {

@@ -1,6 +1,5 @@
 const std = @import("std");
 
-
 pub fn main() !void {
     gen_ts(Bar);
 }
