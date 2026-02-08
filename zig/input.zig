@@ -1,4 +1,4 @@
-// cd zig && echo "Andrew" | zig run input.zig
+//  echo "Andrew" | zig run input.zig
 const std = @import("std");
 
 pub fn main(init: std.process.Init) !void {

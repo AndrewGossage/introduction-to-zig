@@ -1,4 +1,4 @@
-// zig build-obj zig/c-02.zig && zig cc -o program zig/zig.c c-02.o && ./program
+// zig build-obj c-02.zig && zig cc -o program zig.c c-02.o && ./program
 export fn add(a: c_int, b: c_int) c_int {
     return a + b;
 }
