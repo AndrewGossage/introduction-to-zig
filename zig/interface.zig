@@ -3,60 +3,57 @@ const Io = std.Io;
 
 const AnimalInterface = struct {
     writer: *std.Io.Writer,
-
-    vtable: struct {
-        speak: *const fn(*AnimalInterface) anyerror!void,
-    },
-    
+    speak_fn: *const fn (*AnimalInterface) anyerror!void,
     pub fn speak(self: *AnimalInterface) !void {
-        try self.vtable.speak(self);
-        try self.writer.flush();
+        try self.speak_fn(self);
     }
-    
 };
 
 const Dog = struct {
     interface: AnimalInterface,
-
+    treats_received: i32 = 0,
     pub fn init(writer: *std.Io.Writer) Dog {
-        return .{.interface = .{.writer = writer, .vtable = .{.speak = bark} }};
+        return .{ .interface = .{
+            .writer = writer,
+            .speak_fn = bark,
+        } };
     }
-
-    pub fn bark(self: *AnimalInterface) !void {
-        try self.writer.print("Woof!\n", .{});
+    pub fn bark(interface: *AnimalInterface) !void {
+        const self: *Dog = @fieldParentPtr("interface", interface);
+        try interface.writer.print("Woof! treats received: {d}\n", .{self.treats_received});
+        self.treats_received += 1;
+        try interface.writer.flush();
     }
-
 };
-
 
 const Cat = struct {
     interface: AnimalInterface,
-
+    times_scared: i32 = 100,
     pub fn init(writer: *std.Io.Writer) Cat {
-        return .{.interface = .{.writer = writer, .vtable = .{.speak = meow} }};
-
+        return .{ .interface = .{
+            .writer = writer,
+            .speak_fn = meow,
+        } };
     }
-    
-    pub fn meow(self: *AnimalInterface) !void {
-        try self.writer.print("Meow!\n", .{});
+    pub fn meow(interface: *AnimalInterface) !void {
+        const self: *Cat = @fieldParentPtr("interface", interface);
+        try interface.writer.print("Meow! Times Scared: {d}\n", .{self.times_scared});
+        self.times_scared += 1;
+        try interface.writer.flush();
     }
-
 };
-
-
-
 
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
     var stdout_buffer: [1024]u8 = undefined;
     var stdout_file_writer: Io.File.Writer = Io.File.Writer.init(.stdout(), io, &stdout_buffer);
     const stdout_writer = &stdout_file_writer.interface;
-    
     var dog: Dog = .init(stdout_writer);
-    try dog.interface.speak();
-
     var cat: Cat = .init(stdout_writer);
-    try cat.interface.speak();
+    const interfaces: [2]*AnimalInterface = .{ &dog.interface, &cat.interface };
+    for (0..3) |_| {
+        for (interfaces) |animal| { 
+            try animal.speak();
+        }
+    }
 }
-
-

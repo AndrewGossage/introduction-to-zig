@@ -4,9 +4,7 @@
             <div style="font-size: 2rem">{{TITLE}}</div>
             <div style="font-size: 1rem">{{BODY}}</div>
 
-            <pre
-                class="code"
-            ><code class="snippet" id="snippet" data-codepath="{{CODE_PATH}}">{{CONTENT}}</code></pre>
+            <pre class="code"><code class="snippet" >{{CONTENT}}</code></pre>
             <pre
                 class="code"
                 style="height: 15vh"
@@ -17,23 +15,11 @@
             document
                 .querySelector('#{{ID}} button')
                 .addEventListener('click', async function () {
-                    const content = `{{CONTENT}}`;
-                    let command = '';
-                    document.querySelector('#output-{{ID}}').innerText = '';
-
-                    if (content.startsWith('//')) {
-                        command += content.split('\n')[0].replace('//', '');
-                    } else {
-                        command += 'zig run {{CODE_PATH}}'.replace(
-                            'zig/',
-                            './'
-                        );
-                    }
                     const response = await fetch('/api/exec', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            request: command,
+                            request: 'cd ../ && zig run {{CODE_PATH}}',
                         }),
                     });
                     const result = await response.text();

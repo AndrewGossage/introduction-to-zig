@@ -66,7 +66,7 @@
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >const std = @import("std");
+            ><code class="snippet" id="snippet" data-codepath="./zig/hello-01.zig">const std = @import("std");
 const builtin = @import("builtin");
 
 pub fn main() !void {
@@ -128,7 +128,7 @@ pub fn main() !void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >const std = @import("std");
+            ><code class="snippet" id="snippet" data-codepath="./zig/hello-02.zig">const std = @import("std");
 const Io = std.Io;
 
 
@@ -235,68 +235,65 @@ pub fn main(init: std.process.Init) !void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >const std = @import("std");
+            ><code class="snippet" id="snippet" data-codepath="./zig/interface.zig">const std = @import("std");
 const Io = std.Io;
 
 const AnimalInterface = struct {
     writer: *std.Io.Writer,
-
-    vtable: struct {
-        speak: *const fn(*AnimalInterface) anyerror!void,
-    },
-    
+    speak_fn: *const fn (*AnimalInterface) anyerror!void,
     pub fn speak(self: *AnimalInterface) !void {
-        try self.vtable.speak(self);
-        try self.writer.flush();
+        try self.speak_fn(self);
     }
-    
 };
 
 const Dog = struct {
     interface: AnimalInterface,
-
+    treats_received: i32 = 0,
     pub fn init(writer: *std.Io.Writer) Dog {
-        return .{.interface = .{.writer = writer, .vtable = .{.speak = bark} }};
+        return .{ .interface = .{
+            .writer = writer,
+            .speak_fn = bark,
+        } };
     }
-
-    pub fn bark(self: *AnimalInterface) !void {
-        try self.writer.print("Woof!\n", .{});
+    pub fn bark(interface: *AnimalInterface) !void {
+        const self: *Dog = @fieldParentPtr("interface", interface);
+        try interface.writer.print("Woof! treats received: {d}\n", .{self.treats_received});
+        self.treats_received += 1;
+        try interface.writer.flush();
     }
-
 };
-
 
 const Cat = struct {
     interface: AnimalInterface,
-
+    times_scared: i32 = 100,
     pub fn init(writer: *std.Io.Writer) Cat {
-        return .{.interface = .{.writer = writer, .vtable = .{.speak = meow} }};
-
+        return .{ .interface = .{
+            .writer = writer,
+            .speak_fn = meow,
+        } };
     }
-    
-    pub fn meow(self: *AnimalInterface) !void {
-        try self.writer.print("Meow!\n", .{});
+    pub fn meow(interface: *AnimalInterface) !void {
+        const self: *Cat = @fieldParentPtr("interface", interface);
+        try interface.writer.print("Meow! Times Scared: {d}\n", .{self.times_scared});
+        self.times_scared += 1;
+        try interface.writer.flush();
     }
-
 };
-
-
-
 
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
     var stdout_buffer: [1024]u8 = undefined;
     var stdout_file_writer: Io.File.Writer = Io.File.Writer.init(.stdout(), io, &stdout_buffer);
     const stdout_writer = &stdout_file_writer.interface;
-    
     var dog: Dog = .init(stdout_writer);
-    try dog.interface.speak();
-
     var cat: Cat = .init(stdout_writer);
-    try cat.interface.speak();
+    const interfaces: [2]*AnimalInterface = .{ &dog.interface, &cat.interface };
+    for (0..3) |_| {
+        for (interfaces) |animal| { 
+            try animal.speak();
+        }
+    }
 }
-
-
 </code></pre>
             <pre
                 class="code"
@@ -313,63 +310,60 @@ const Io = std.Io;
 
 const AnimalInterface = struct {
     writer: *std.Io.Writer,
-
-    vtable: struct {
-        speak: *const fn(*AnimalInterface) anyerror!void,
-    },
-    
+    speak_fn: *const fn (*AnimalInterface) anyerror!void,
     pub fn speak(self: *AnimalInterface) !void {
-        try self.vtable.speak(self);
-        try self.writer.flush();
+        try self.speak_fn(self);
     }
-    
 };
 
 const Dog = struct {
     interface: AnimalInterface,
-
+    treats_received: i32 = 0,
     pub fn init(writer: *std.Io.Writer) Dog {
-        return .{.interface = .{.writer = writer, .vtable = .{.speak = bark} }};
+        return .{ .interface = .{
+            .writer = writer,
+            .speak_fn = bark,
+        } };
     }
-
-    pub fn bark(self: *AnimalInterface) !void {
-        try self.writer.print("Woof!\n", .{});
+    pub fn bark(interface: *AnimalInterface) !void {
+        const self: *Dog = @fieldParentPtr("interface", interface);
+        try interface.writer.print("Woof! treats received: {d}\n", .{self.treats_received});
+        self.treats_received += 1;
+        try interface.writer.flush();
     }
-
 };
-
 
 const Cat = struct {
     interface: AnimalInterface,
-
+    times_scared: i32 = 100,
     pub fn init(writer: *std.Io.Writer) Cat {
-        return .{.interface = .{.writer = writer, .vtable = .{.speak = meow} }};
-
+        return .{ .interface = .{
+            .writer = writer,
+            .speak_fn = meow,
+        } };
     }
-    
-    pub fn meow(self: *AnimalInterface) !void {
-        try self.writer.print("Meow!\n", .{});
+    pub fn meow(interface: *AnimalInterface) !void {
+        const self: *Cat = @fieldParentPtr("interface", interface);
+        try interface.writer.print("Meow! Times Scared: {d}\n", .{self.times_scared});
+        self.times_scared += 1;
+        try interface.writer.flush();
     }
-
 };
-
-
-
 
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
     var stdout_buffer: [1024]u8 = undefined;
     var stdout_file_writer: Io.File.Writer = Io.File.Writer.init(.stdout(), io, &stdout_buffer);
     const stdout_writer = &stdout_file_writer.interface;
-    
     var dog: Dog = .init(stdout_writer);
-    try dog.interface.speak();
-
     var cat: Cat = .init(stdout_writer);
-    try cat.interface.speak();
+    const interfaces: [2]*AnimalInterface = .{ &dog.interface, &cat.interface };
+    for (0..3) |_| {
+        for (interfaces) |animal| { 
+            try animal.speak();
+        }
+    }
 }
-
-
 `;
                     let command = '';
                     document.querySelector('#output-interface').innerText = '';
@@ -436,15 +430,15 @@ pub fn main(init: std.process.Init) !void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >//  echo "Andrew" | zig run input.zig
+            ><code class="snippet" id="snippet" data-codepath="./zig/input.zig">//  echo "Andrew" | zig run input.zig
 const std = @import("std");
 
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
     std.debug.print("Enter your name: ", .{});
-
-    var stdin_buffer: [1024]u8 = undefined;
-    var stdin_reader = std.Io.File.stdin().reader(io, &stdin_buffer);
+    const allocator = init.arena.allocator();
+    const stdin_buffer = try allocator.alloc(u8, 256);
+    var stdin_reader = std.Io.File.stdin().reader(io, stdin_buffer);
     const stdin = &stdin_reader.interface;
 
     const name = try stdin.takeDelimiterExclusive('\n');
@@ -467,9 +461,9 @@ const std = @import("std");
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
     std.debug.print("Enter your name: ", .{});
-
-    var stdin_buffer: [1024]u8 = undefined;
-    var stdin_reader = std.Io.File.stdin().reader(io, &stdin_buffer);
+    const allocator = init.arena.allocator();
+    const stdin_buffer = try allocator.alloc(u8, 256);
+    var stdin_reader = std.Io.File.stdin().reader(io, stdin_buffer);
     const stdin = &stdin_reader.interface;
 
     const name = try stdin.takeDelimiterExclusive('\n');
@@ -510,7 +504,7 @@ pub fn main(init: std.process.Init) !void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >// echo "Andrew" | zig run input-02.zig
+            ><code class="snippet" id="snippet" data-codepath="./zig/input-02.zig">// echo "Andrew" | zig run input-02.zig
 const std = @import("std");
 
 pub fn main(init: std.process.Init) !void {
@@ -586,7 +580,7 @@ pub fn main(init: std.process.Init) !void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >// zig run hello-02.zig -- hello world
+            ><code class="snippet" id="snippet" data-codepath="./zig/input-03.zig">// zig run hello-02.zig -- hello world
 const std = @import("std");
 const Io = std.Io;
 
@@ -697,7 +691,7 @@ pub fn main(init: std.process.Init) !void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >// zig run c.zig -lc
+            ><code class="snippet" id="snippet" data-codepath="./zig/c.zig">// zig run c.zig -lc
 
 const std = @import("std");
 const c = @cImport({
@@ -769,7 +763,7 @@ pub fn main() void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >// zig build-obj c-02.zig && zig cc -o program zig.c c-02.o && ./program
+            ><code class="snippet" id="snippet" data-codepath="./zig/c-02.zig">// zig build-obj c-02.zig && zig cc -o program zig.c c-02.o && ./program
 export fn add(a: c_int, b: c_int) c_int {
     return a + b;
 }
@@ -880,7 +874,7 @@ export fn add(a: c_int, b: c_int) c_int {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >//kill $(lsof -i TCP:8082 | awk 'NR==2 {print $2}') 2>/dev/null;  zig run server.zig & echo "listening on port 8082"
+            ><code class="snippet" id="snippet" data-codepath="./zig/server.zig">//kill $(lsof -i TCP:8082 | awk 'NR==2 {print $2}') 2>/dev/null;  zig run server.zig & echo "listening on port 8082"
 
 const std = @import("std");
 
@@ -974,7 +968,7 @@ fn listen(io: std.Io) !void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >const std = @import("std");
+            ><code class="snippet" id="snippet" data-codepath="./zig/client.zig">const std = @import("std");
 
 pub fn main(init: std.process.Init) !void {
     var arena = init.arena;
@@ -1129,7 +1123,7 @@ fn fetch(allocator: std.mem.Allocator, io: std.Io, path: []const u8) ![]const u8
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >const std = @import("std");
+            ><code class="snippet" id="snippet" data-codepath="./zig/meta-01.zig">const std = @import("std");
 
 pub fn main() !void {
     gen_ts(Bar);
@@ -1271,7 +1265,7 @@ inline fn convert_name(comptime T: type) [@typeName(T).len]u8 {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >// cd zig && zig run builtin-01.zig  && zig run builtin-01.zig -O ReleaseFast
+            ><code class="snippet" id="snippet" data-codepath="./zig/builtin-01.zig">// cd zig && zig run builtin-01.zig  && zig run builtin-01.zig -O ReleaseFast
 const std = @import("std");
 const builtin = @import("builtin");
 
