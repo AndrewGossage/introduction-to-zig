@@ -69,11 +69,13 @@ fn hxExec(request: *std.http.Server.Request, allocator: std.mem.Allocator) !void
 
     // Get command from query parameter
     const shell = if (builtin.os.tag == .linux) "/bin/bash" else "/usr/local/bin/bash";
+    var command_b: [512]u8 = undefined;
+    const command  = try std.fmt.bufPrint(&command_b, "cd ../zig && {s}", .{reqBody.request});
 
     // Execute shell command
     const result = std.process.Child.run(.{
         .allocator = allocator,
-        .argv = &[_][]const u8{ shell, "-c", reqBody.request },
+        .argv = &[_][]const u8{ shell, "-c", command },
         .max_output_bytes = 1024 * 1024, // 1MB max output
     }) catch |err| {
         const error_msg = try std.fmt.allocPrint(allocator, "Error executing command: {}", .{err});

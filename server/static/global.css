@@ -257,13 +257,13 @@ body {
 }
 
 .fun {
-    color: purple;
+    color: #AFE1AF;
 }
 .number {
     color: var(--cinnamon-wood);
 
 }
 .field {
-    color: purple;
+    color: #AFE1AF;
 }
 

@@ -18,13 +18,16 @@
                 .querySelector('#{{ID}} button')
                 .addEventListener('click', async function () {
                     const content = `{{CONTENT}}`;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-{{ID}}').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run {{CODE_PATH}}';
+                        command += 'zig run {{CODE_PATH}}'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',

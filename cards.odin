@@ -20,29 +20,37 @@ Card :: struct {
 
 cards :[]Card: {
     {.HTML, "intro", "Introduction to Zig", "", "./slides/intro.html"},
-    //{.HTML, "site", "What is Zig", "", "./slides/site.html"},
-    
+   
+    // hello world
     {.HTML, "hello0", "Hello World", "And Goodbye Sanity", "./slides/hello.html"},
     {.CODE, "hello", "Hello World", "Minimal Example", "./zig/hello-01.zig"},
-    {.CODE, "hello00", "Hello World", "Correct Example", "./zig/hello-00.zig"},
+    {.CODE, "hello00", "Hello World", "Correct Example", "./zig/hello-02.zig"},
+    
+    //interfaces
+    {.HTML, "hello0", "Interfacess", "These are userful... trust me, bro!", "./slides/interface.html"},
+    {.CODE, "interface", "Interfaces", "vtables, vtables everywhere!", "./zig/interface.zig"},
 
+    // input
     {.HTML, "hello0", "User Input", "AKA: For if your program has users", "./slides/kermit.html"},
     {.CODE, "hello1", "User Input", "Part 1", "./zig/input.zig"},
     {.CODE, "hello2", "User Input", "Part 2", "./zig/input-02.zig"},
-    {.CODE, "hello3", "User Input", "Part 3", "./zig/hello-02.zig"},
+    {.CODE, "hello3", "User Input", "Part 3", "./zig/input-03.zig"},
 
-   
-    {.HTML, "internet", "Interfacing With C", "AKA: The Segment At Fault", "./slides/c.html"},
-    {.CODE, "linking-c", "Interfacing With C", "part 1", "./zig/c.zig"},
-    {.CODE, "linking-c2", "Interfacing With C", "part 2", "./zig/c-02.zig"},
+    // C code
+    {.HTML, "internet", "C", "AKA: The Segment At Fault", "./slides/c.html"},
+    {.CODE, "linking-c", "C", "part 1", "./zig/c.zig"},
+    {.CODE, "linking-c2", "C", "part 2", "./zig/c-02.zig"},
     
+    // client/server
     {.HTML, "internet", "Welcome to The Internet", "Clients and Servers", "./slides/internet.html"},
     {.CODE, "web-server", "Welcome to The Internet", "Server", "./zig/server.zig"},
     {.CODE, "web-client", "Welcome to The Internet", "Client", "./zig/client.zig"},
     
+    // advanced
     {.HTML, "Advanced", "Advanced Topics", "AKA: How to make consts and influence vars", "./slides/pro.html"},
     {.CODE, "meta", "Meta Programming", "Comptime Magic", "./zig/meta-01.zig" },
-    {.CODE, "builtin", "Builtin", "I heard you like meta programming", "./zig/builtin-01.zig" }
+    {.CODE, "builtin", "Builtin", "I heard you like meta programming", "./zig/builtin-01.zig" },
+
 
 }
 

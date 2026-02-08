@@ -94,13 +94,16 @@ pub fn main() !void {
 
 
 `;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-hello').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run ./zig/hello-01.zig';
+                        command += 'zig run ./zig/hello-01.zig'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',
@@ -125,8 +128,7 @@ pub fn main() !void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >//cd zig && zig run hello-00.zig
-const std = @import("std");
+            ><code class="snippet" id="snippet" >const std = @import("std");
 const Io = std.Io;
 
 
@@ -151,8 +153,7 @@ pub fn main(init: std.process.Init) !void {
             document
                 .querySelector('#hello00 button')
                 .addEventListener('click', async function () {
-                    const content = `//cd zig && zig run hello-00.zig
-const std = @import("std");
+                    const content = `const std = @import("std");
 const Io = std.Io;
 
 
@@ -167,13 +168,16 @@ pub fn main(init: std.process.Init) !void {
 
 
 `;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-hello00').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run ./zig/hello-00.zig';
+                        command += 'zig run ./zig/hello-02.zig'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',
@@ -184,6 +188,209 @@ pub fn main(init: std.process.Init) !void {
                     });
                     const result = await response.text();
                     document.querySelector('#output-hello00').innerText =
+                        '\n' +
+                        result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
+                });
+        </script>
+    </div>
+</section>
+<section class="section" id="hello0">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Interfacess</div>
+            <div style="font-size: 1rem">These are userful... trust me, bro!</div>
+            <div style="max-height: 80%; overflow: auto"><div
+    style="
+        width: 100%;
+        display: flex;
+        align-items: center;
+        max-height:70vh;
+        overflow-auto;
+        justify-content: center;
+    "
+>
+    <div
+        class="tenor-gif-embed"
+        data-postid="462180725101108116"
+        data-share-method="host"
+        data-aspect-ratio="1.77857"
+        data-width="70%"
+    ></div>
+    <script
+        type="text/javascript"
+        async
+        src="https://tenor.com/embed.js"
+    ></script>
+</div>
+</div>
+        </div>
+        <script></script>
+    </div>
+</section>
+<section class="section" id="interface">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Interfaces</div>
+            <div style="font-size: 1rem">vtables, vtables everywhere!</div>
+
+            <pre
+                class="code"
+            ><code class="snippet" id="snippet" >const std = @import("std");
+const Io = std.Io;
+
+const AnimalInterface = struct {
+    writer: *std.Io.Writer,
+
+    vtable: struct {
+        speak: *const fn(*AnimalInterface) anyerror!void,
+    },
+    
+    pub fn speak(self: *AnimalInterface) !void {
+        try self.vtable.speak(self);
+        try self.writer.flush();
+    }
+    
+};
+
+const Dog = struct {
+    interface: AnimalInterface,
+
+    pub fn init(writer: *std.Io.Writer) Dog {
+        return .{.interface = .{.writer = writer, .vtable = .{.speak = bark} }};
+    }
+
+    pub fn bark(self: *AnimalInterface) !void {
+        try self.writer.print("Woof!\n", .{});
+    }
+
+};
+
+
+const Cat = struct {
+    interface: AnimalInterface,
+
+    pub fn init(writer: *std.Io.Writer) Cat {
+        return .{.interface = .{.writer = writer, .vtable = .{.speak = meow} }};
+
+    }
+    
+    pub fn meow(self: *AnimalInterface) !void {
+        try self.writer.print("Meow!\n", .{});
+    }
+
+};
+
+
+
+
+pub fn main(init: std.process.Init) !void {
+    const io = init.io;
+    var stdout_buffer: [1024]u8 = undefined;
+    var stdout_file_writer: Io.File.Writer = Io.File.Writer.init(.stdout(), io, &stdout_buffer);
+    const stdout_writer = &stdout_file_writer.interface;
+    
+    var dog: Dog = .init(stdout_writer);
+    try dog.interface.speak();
+
+    var cat: Cat = .init(stdout_writer);
+    try cat.interface.speak();
+}
+
+
+</code></pre>
+            <pre
+                class="code"
+                style="height: 15vh"
+            ><code class="snippet results-box" id="output-interface"></code></pre>
+            <button style="margin: auto; font-size: 1.3rem">Execute</button>
+        </div>
+        <script>
+            document
+                .querySelector('#interface button')
+                .addEventListener('click', async function () {
+                    const content = `const std = @import("std");
+const Io = std.Io;
+
+const AnimalInterface = struct {
+    writer: *std.Io.Writer,
+
+    vtable: struct {
+        speak: *const fn(*AnimalInterface) anyerror!void,
+    },
+    
+    pub fn speak(self: *AnimalInterface) !void {
+        try self.vtable.speak(self);
+        try self.writer.flush();
+    }
+    
+};
+
+const Dog = struct {
+    interface: AnimalInterface,
+
+    pub fn init(writer: *std.Io.Writer) Dog {
+        return .{.interface = .{.writer = writer, .vtable = .{.speak = bark} }};
+    }
+
+    pub fn bark(self: *AnimalInterface) !void {
+        try self.writer.print("Woof!\n", .{});
+    }
+
+};
+
+
+const Cat = struct {
+    interface: AnimalInterface,
+
+    pub fn init(writer: *std.Io.Writer) Cat {
+        return .{.interface = .{.writer = writer, .vtable = .{.speak = meow} }};
+
+    }
+    
+    pub fn meow(self: *AnimalInterface) !void {
+        try self.writer.print("Meow!\n", .{});
+    }
+
+};
+
+
+
+
+pub fn main(init: std.process.Init) !void {
+    const io = init.io;
+    var stdout_buffer: [1024]u8 = undefined;
+    var stdout_file_writer: Io.File.Writer = Io.File.Writer.init(.stdout(), io, &stdout_buffer);
+    const stdout_writer = &stdout_file_writer.interface;
+    
+    var dog: Dog = .init(stdout_writer);
+    try dog.interface.speak();
+
+    var cat: Cat = .init(stdout_writer);
+    try cat.interface.speak();
+}
+
+
+`;
+                    let command = '';
+                    document.querySelector('#output-interface').innerText = '';
+
+                    if (content.startsWith('//')) {
+                        command += content.split('\n')[0].replace('//', '');
+                    } else {
+                        command += 'zig run ./zig/interface.zig'.replace(
+                            'zig/',
+                            './'
+                        );
+                    }
+                    const response = await fetch('/api/exec', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            request: command,
+                        }),
+                    });
+                    const result = await response.text();
+                    document.querySelector('#output-interface').innerText =
                         '\n' +
                         result.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').trim();
                 });
@@ -229,7 +436,7 @@ pub fn main(init: std.process.Init) !void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >// cd zig && echo "Andrew" | zig run input.zig
+            ><code class="snippet" id="snippet" >//  echo "Andrew" | zig run input.zig
 const std = @import("std");
 
 pub fn main(init: std.process.Init) !void {
@@ -254,7 +461,7 @@ pub fn main(init: std.process.Init) !void {
             document
                 .querySelector('#hello1 button')
                 .addEventListener('click', async function () {
-                    const content = `// cd zig && echo "Andrew" | zig run input.zig
+                    const content = `//  echo "Andrew" | zig run input.zig
 const std = @import("std");
 
 pub fn main(init: std.process.Init) !void {
@@ -269,13 +476,16 @@ pub fn main(init: std.process.Init) !void {
     std.debug.print("\nHello {s}\n", .{name});
 }
 `;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-hello1').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run ./zig/input.zig';
+                        command += 'zig run ./zig/input.zig'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',
@@ -300,12 +510,12 @@ pub fn main(init: std.process.Init) !void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >// cd zig && echo "Andrew" | zig run input-02.zig
+            ><code class="snippet" id="snippet" >// echo "Andrew" | zig run input-02.zig
 const std = @import("std");
 
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
-    if (try std.Io.File.stdin().isTty(io)){
+    if (try std.Io.File.stdin().isTty(io)) {
         std.debug.print("Enter your name: ", .{});
     }
     var stdin_buffer: [1024]u8 = undefined;
@@ -326,12 +536,12 @@ pub fn main(init: std.process.Init) !void {
             document
                 .querySelector('#hello2 button')
                 .addEventListener('click', async function () {
-                    const content = `// cd zig && echo "Andrew" | zig run input-02.zig
+                    const content = `// echo "Andrew" | zig run input-02.zig
 const std = @import("std");
 
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
-    if (try std.Io.File.stdin().isTty(io)){
+    if (try std.Io.File.stdin().isTty(io)) {
         std.debug.print("Enter your name: ", .{});
     }
     var stdin_buffer: [1024]u8 = undefined;
@@ -342,13 +552,16 @@ pub fn main(init: std.process.Init) !void {
     std.debug.print("\nHello {s}\n", .{name});
 }
 `;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-hello2').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run ./zig/input-02.zig';
+                        command += 'zig run ./zig/input-02.zig'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',
@@ -373,7 +586,7 @@ pub fn main(init: std.process.Init) !void {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >// cd zig && zig run hello-02.zig -- hello world
+            ><code class="snippet" id="snippet" >// zig run hello-02.zig -- hello world
 const std = @import("std");
 const Io = std.Io;
 
@@ -384,9 +597,9 @@ pub fn main(init: std.process.Init) !void {
     const arena: std.mem.Allocator = init.arena.allocator();
     // Accessing command line arguments:
     const args = try init.minimal.args.toSlice(arena);
-    for (args, 0 .. args.len) |arg, i| {
+    for (args, 0..args.len) |arg, i| {
         if (i > 0) {
-            std.log.info("{d} - {s}", .{i, arg});
+            std.log.info("{d} - {s}", .{ i, arg });
         }
     }
 }
@@ -401,7 +614,7 @@ pub fn main(init: std.process.Init) !void {
             document
                 .querySelector('#hello3 button')
                 .addEventListener('click', async function () {
-                    const content = `// cd zig && zig run hello-02.zig -- hello world
+                    const content = `// zig run hello-02.zig -- hello world
 const std = @import("std");
 const Io = std.Io;
 
@@ -412,20 +625,23 @@ pub fn main(init: std.process.Init) !void {
     const arena: std.mem.Allocator = init.arena.allocator();
     // Accessing command line arguments:
     const args = try init.minimal.args.toSlice(arena);
-    for (args, 0 .. args.len) |arg, i| {
+    for (args, 0..args.len) |arg, i| {
         if (i > 0) {
-            std.log.info("{d} - {s}", .{i, arg});
+            std.log.info("{d} - {s}", .{ i, arg });
         }
     }
 }
 `;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-hello3').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run ./zig/hello-02.zig';
+                        command += 'zig run ./zig/input-03.zig'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',
@@ -445,7 +661,7 @@ pub fn main(init: std.process.Init) !void {
 <section class="section" id="internet">
     <div class="slide-container">
         <div class="slide">
-            <div style="font-size: 2rem">Interfacing With C</div>
+            <div style="font-size: 2rem">C</div>
             <div style="font-size: 1rem">AKA: The Segment At Fault</div>
             <div style="max-height: 80%; overflow: auto"><div
     style="
@@ -476,20 +692,19 @@ pub fn main(init: std.process.Init) !void {
 <section class="section" id="linking-c">
     <div class="slide-container">
         <div class="slide">
-            <div style="font-size: 2rem">Interfacing With C</div>
+            <div style="font-size: 2rem">C</div>
             <div style="font-size: 1rem">part 1</div>
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >// zig run ./zig/c.zig -lc
+            ><code class="snippet" id="snippet" >// zig run c.zig -lc
 
 const std = @import("std");
 const c = @cImport({
     @cInclude("stdio.h");
 });
 
-pub fn main(init: std.process.Init) void {
-    _ = init;
+pub fn main() void {
     _ = c.printf("Hello %s %d\n", "world", @as(i8, 4));
 }
 
@@ -506,28 +721,30 @@ pub fn main(init: std.process.Init) void {
             document
                 .querySelector('#linking-c button')
                 .addEventListener('click', async function () {
-                    const content = `// zig run ./zig/c.zig -lc
+                    const content = `// zig run c.zig -lc
 
 const std = @import("std");
 const c = @cImport({
     @cInclude("stdio.h");
 });
 
-pub fn main(init: std.process.Init) void {
-    _ = init;
+pub fn main() void {
     _ = c.printf("Hello %s %d\n", "world", @as(i8, 4));
 }
 
 
 
 `;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-linking-c').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run ./zig/c.zig';
+                        command += 'zig run ./zig/c.zig'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',
@@ -547,12 +764,12 @@ pub fn main(init: std.process.Init) void {
 <section class="section" id="linking-c2">
     <div class="slide-container">
         <div class="slide">
-            <div style="font-size: 2rem">Interfacing With C</div>
+            <div style="font-size: 2rem">C</div>
             <div style="font-size: 1rem">part 2</div>
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >// zig build-obj zig/c-02.zig && zig cc -o program zig/zig.c c-02.o && ./program
+            ><code class="snippet" id="snippet" >// zig build-obj c-02.zig && zig cc -o program zig.c c-02.o && ./program
 export fn add(a: c_int, b: c_int) c_int {
     return a + b;
 }
@@ -580,7 +797,7 @@ export fn add(a: c_int, b: c_int) c_int {
             document
                 .querySelector('#linking-c2 button')
                 .addEventListener('click', async function () {
-                    const content = `// zig build-obj zig/c-02.zig && zig cc -o program zig/zig.c c-02.o && ./program
+                    const content = `// zig build-obj c-02.zig && zig cc -o program zig.c c-02.o && ./program
 export fn add(a: c_int, b: c_int) c_int {
     return a + b;
 }
@@ -598,13 +815,16 @@ export fn add(a: c_int, b: c_int) c_int {
 //     return 0;
 // }
 `;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-linking-c2').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run ./zig/c-02.zig';
+                        command += 'zig run ./zig/c-02.zig'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',
@@ -660,7 +880,7 @@ export fn add(a: c_int, b: c_int) c_int {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" >//kill $(lsof -i TCP:8082 | awk 'NR==2 {print $2}') 2>/dev/null; cd zig && zig run server.zig & echo "listening on port 8082"
+            ><code class="snippet" id="snippet" >//kill $(lsof -i TCP:8082 | awk 'NR==2 {print $2}') 2>/dev/null;  zig run server.zig & echo "listening on port 8082"
 
 const std = @import("std");
 
@@ -695,7 +915,7 @@ fn listen(io: std.Io) !void {
             document
                 .querySelector('#web-server button')
                 .addEventListener('click', async function () {
-                    const content = `//kill $(lsof -i TCP:8082 | awk 'NR==2 {print $2}') 2>/dev/null; cd zig && zig run server.zig & echo "listening on port 8082"
+                    const content = `//kill $(lsof -i TCP:8082 | awk 'NR==2 {print $2}') 2>/dev/null;  zig run server.zig & echo "listening on port 8082"
 
 const std = @import("std");
 
@@ -720,13 +940,16 @@ fn listen(io: std.Io) !void {
     return;
 }
 `;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-web-server').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run ./zig/server.zig';
+                        command += 'zig run ./zig/server.zig'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',
@@ -841,13 +1064,16 @@ fn fetch(allocator: std.mem.Allocator, io: std.Io, path: []const u8) ![]const u8
 
 
 `;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-web-client').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run ./zig/client.zig';
+                        command += 'zig run ./zig/client.zig'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',
@@ -1011,13 +1237,16 @@ inline fn convert_name(comptime T: type) [@typeName(T).len]u8 {
 
 
 `;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-meta').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run ./zig/meta-01.zig';
+                        command += 'zig run ./zig/meta-01.zig'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',
@@ -1090,13 +1319,16 @@ fn debug(comptime fmt: []const u8, args: anytype) void {
 
 
 `;
-                    let command = 'cd ../ && ';
+                    let command = '';
                     document.querySelector('#output-builtin').innerText = '';
 
                     if (content.startsWith('//')) {
                         command += content.split('\n')[0].replace('//', '');
                     } else {
-                        command += 'zig run ./zig/builtin-01.zig';
+                        command += 'zig run ./zig/builtin-01.zig'.replace(
+                            'zig/',
+                            './'
+                        );
                     }
                     const response = await fetch('/api/exec', {
                         method: 'POST',

@@ -47,6 +47,8 @@ print_card :: proc(card: Card) -> (string, bool) {
 
         if !ok {
             fmt.eprintln("Failed to read file")
+            fmt.eprintln(card.code_path.?)
+
             return "", false
         }
         result, ok = strings.replace_all(result, "{{CONTENT}}", string(snippet))
