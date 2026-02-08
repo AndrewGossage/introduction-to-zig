@@ -1,4 +1,4 @@
-// cd zig && zig run builtin-01.zig  && zig run builtin-01.zig -O ReleaseFast
+//  zig run builtin-01.zig  && zig run builtin-01.zig -O ReleaseFast
 const std = @import("std");
 const builtin = @import("builtin");
 

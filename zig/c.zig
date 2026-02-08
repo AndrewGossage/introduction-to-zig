@@ -1,6 +1,4 @@
 // zig run c.zig -lc
-
-const std = @import("std");
 const c = @cImport({
     @cInclude("stdio.h");
 });
