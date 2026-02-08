@@ -67,8 +67,6 @@
             <pre
                 class="code"
             ><code class="snippet" id="snippet" data-codepath="./zig/hello-01.zig">const std = @import("std");
-const builtin = @import("builtin");
-
 pub fn main() !void {
     std.debug.print("Hello World!\n", .{});
 }
@@ -86,8 +84,6 @@ pub fn main() !void {
                 .querySelector('#hello button')
                 .addEventListener('click', async function () {
                     const content = `const std = @import("std");
-const builtin = @import("builtin");
-
 pub fn main() !void {
     std.debug.print("Hello World!\n", .{});
 }
@@ -131,11 +127,10 @@ pub fn main() !void {
             ><code class="snippet" id="snippet" data-codepath="./zig/hello-02.zig">const std = @import("std");
 const Io = std.Io;
 
-
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
     var stdout_buffer: [1024]u8 = undefined;
-    var stdout_file_writer: Io.File.Writer = Io.File.Writer.init(.stdout(), io, &stdout_buffer);
+    var stdout_file_writer: Io.File.Writer = .init(.stdout(), io, &stdout_buffer);
     const stdout_writer = &stdout_file_writer.interface;
     try stdout_writer.print("Hello World!\n", .{});
     try stdout_writer.flush(); // Don't forget to flush!
@@ -156,11 +151,10 @@ pub fn main(init: std.process.Init) !void {
                     const content = `const std = @import("std");
 const Io = std.Io;
 
-
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
     var stdout_buffer: [1024]u8 = undefined;
-    var stdout_file_writer: Io.File.Writer = Io.File.Writer.init(.stdout(), io, &stdout_buffer);
+    var stdout_file_writer: Io.File.Writer = .init(.stdout(), io, &stdout_buffer);
     const stdout_writer = &stdout_file_writer.interface;
     try stdout_writer.print("Hello World!\n", .{});
     try stdout_writer.flush(); // Don't forget to flush!
@@ -692,8 +686,6 @@ pub fn main(init: std.process.Init) !void {
             <pre
                 class="code"
             ><code class="snippet" id="snippet" data-codepath="./zig/c.zig">// zig run c.zig -lc
-
-const std = @import("std");
 const c = @cImport({
     @cInclude("stdio.h");
 });
@@ -716,8 +708,6 @@ pub fn main() void {
                 .querySelector('#linking-c button')
                 .addEventListener('click', async function () {
                     const content = `// zig run c.zig -lc
-
-const std = @import("std");
 const c = @cImport({
     @cInclude("stdio.h");
 });
@@ -1265,7 +1255,7 @@ inline fn convert_name(comptime T: type) [@typeName(T).len]u8 {
 
             <pre
                 class="code"
-            ><code class="snippet" id="snippet" data-codepath="./zig/builtin-01.zig">// cd zig && zig run builtin-01.zig  && zig run builtin-01.zig -O ReleaseFast
+            ><code class="snippet" id="snippet" data-codepath="./zig/builtin-01.zig">//  zig run builtin-01.zig  && zig run builtin-01.zig -O ReleaseFast
 const std = @import("std");
 const builtin = @import("builtin");
 
@@ -1294,7 +1284,7 @@ fn debug(comptime fmt: []const u8, args: anytype) void {
             document
                 .querySelector('#builtin button')
                 .addEventListener('click', async function () {
-                    const content = `// cd zig && zig run builtin-01.zig  && zig run builtin-01.zig -O ReleaseFast
+                    const content = `//  zig run builtin-01.zig  && zig run builtin-01.zig -O ReleaseFast
 const std = @import("std");
 const builtin = @import("builtin");
 
