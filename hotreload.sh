@@ -4,7 +4,7 @@
 now=$(date +%s)
 while true; do
     sleep 1
-    for filename in $(fd | grep -E "(\.html|\.odin|\.js|\.sh|\.zig)"); do
+    for filename in $(fd | grep -E "(\.html|\.odin|\.js|\.sh|\.zig|\.css)"); do
         [ -f "$filename" ] || continue  # Skip if not a file
         mtime=$(stat -c %Y "$filename" 2>/dev/null || stat -f %m "$filename" 2>/dev/null)
         if [ "$mtime" -gt "$now" ]; then

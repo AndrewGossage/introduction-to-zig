@@ -53,6 +53,8 @@ cards :[]Card: {
     {.CODE, "meta", "Meta Programming", "Comptime Magic", "./zig/meta-01.zig" },
     {.CODE, "builtin", "Builtin", "I heard you like meta programming", "./zig/builtin-01.zig" },
 
+    // end
+    {.HTML, "end", "Questions?", "Thanks for listening!", "./slides/end.html"},
 
 }
 
