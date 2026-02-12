@@ -10,17 +10,17 @@ main :: proc() {
         
 
     for card in cards {
-        result1, ok := print_card(card)
+        card_html, ok := print_card(card)
         if !ok { return }
-        strings.write_string(&builder, result1)
+        strings.write_string(&builder, card_html)
     }
-    
-    result := strings.to_string(builder);
-   
-    body, ok := print_body(result)
-    defer delete(body)
+
+    content := strings.to_string(builder);
+
+    page, ok := print_body(content)
+    defer delete(page)
     if !ok { return }
 
-    
-    fmt.println(body)
+
+    fmt.println(page)
 }

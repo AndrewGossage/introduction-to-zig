@@ -14,11 +14,172 @@
             <section class="section" id="intro">
     <div class="slide-container">
         <div class="slide">
-            <div style="font-size: 2rem">Introduction to Zig</div>
-            <div style="font-size: 1rem"></div>
-            <div style="max-height: 80%; overflow: auto"><div>
-    
-
+            <div style="font-size: 2rem">Introduction to Zig 0.16</div>
+            <div style="font-size: 1rem">A Tour of Zig from Hello World to Metaprogramming</div>
+            <div style="max-height: 80%; overflow: auto"><div
+    style="
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        padding: 2rem;
+    "
+>
+    <img
+        src="https://ziglang.org/zig-logo-dark.svg"
+        alt="Zig logo"
+        style="width: 40%; max-width: 400px"
+    />
+    <p
+        style="
+            margin-top: auto;
+            font-size: 1.2rem;
+            text-align: left;
+            max-width: 600px;
+            line-height: 1.6;
+            color: #d4d4d4;
+        "
+    >
+        Zig is a general-purpose systems programming language focused on
+        simplicity, performance, and safety. In this presentation we'll walk
+        through the language from hello world to metaprogramming.
+    </p>
+    <ul
+        style="
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            text-align: left;
+            font-size: 1rem;
+            color: #d4d4d4;
+            line-height: 2;
+        "
+    >
+        <li>Hello World</li>
+        <li>Interfaces</li>
+        <li>User Input</li>
+        <li>C Interop</li>
+        <li>HTTP Clients &amp; Servers</li>
+        <li>Comptime &amp; Metaprogramming</li>
+    </ul>
+</div>
+</div>
+        </div>
+        <script></script>
+    </div>
+</section>
+<section class="section" id="bio">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">About the Presenter</div>
+            <div style="font-size: 1rem">Andrew Gossage</div>
+            <div style="max-height: 80%; overflow: auto"><div
+    style="
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        padding: 2rem;
+    "
+>
+    <p
+        style="
+            font-size: 1.2rem;
+            text-align: left;
+            max-width: 600px;
+            line-height: 1.8;
+            color: #d4d4d4;
+        "
+    >
+        Lead developer at
+        <a href="https://writegrader.com" style="color: #009fb7">WriteGrader</a
+        >, an AI-powered learning platform that gives students formative
+        feedback, practice assignments graded against their course rubrics, and
+        interactive AI tutors for course content.
+    </p>
+    <p
+        style="
+            font-size: 1.2rem;
+            text-align: left;
+            max-width: 600px;
+            line-height: 1.8;
+            color: #d4d4d4;
+        "
+    >
+        Back-end programmer specializing in business applications and data
+        science. Primarily works in Typescript, but also proficient in Python,dd
+        C, Zig, and other languages.
+    </p>
+</div>
+</div>
+        </div>
+        <script></script>
+    </div>
+</section>
+<section class="section" id="stack">
+    <div class="slide-container">
+        <div class="slide">
+            <div style="font-size: 2rem">Tech Stack</div>
+            <div style="font-size: 1rem">How This Presentation Is Built</div>
+            <div style="max-height: 80%; overflow: auto"><div
+    style="
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        padding: 2rem;
+    "
+>
+    <p
+        style="
+            font-size: 1.1rem;
+            text-align: left;
+            max-width: 600px;
+            line-height: 1.8;
+            color: #d4d4d4;
+        "
+    >
+        This presentation is itself built with Zig. Slides are defined as
+        cards in Odin, compiled to a static HTML page, and served by
+        <a href="https://www.zoi-server.com" style="color: #009fb7">Zoi</a>
+        &mdash; a zero-dependency HTTP server written in Zig.
+    </p>
+    <table
+        style="
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 1rem;
+            color: #d4d4d4;
+            max-width: 600px;
+            width: 100%;
+        "
+    >
+        <tr style="border-bottom: 1px solid #555">
+            <td style="padding: 0.6rem 1rem; color: #009fb7; font-weight: bold">Server</td>
+            <td style="padding: 0.6rem 1rem">Zig 0.15 (Zoi)</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #555">
+            <td style="padding: 0.6rem 1rem; color: #009fb7; font-weight: bold">Content Generation</td>
+            <td style="padding: 0.6rem 1rem">Odin</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #555">
+            <td style="padding: 0.6rem 1rem; color: #009fb7; font-weight: bold">Demo Programs</td>
+            <td style="padding: 0.6rem 1rem">Zig 0.16</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #555">
+            <td style="padding: 0.6rem 1rem; color: #009fb7; font-weight: bold">Frontend</td>
+            <td style="padding: 0.6rem 1rem">HTML / CSS / JS</td>
+        </tr>
+        <tr>
+            <td style="padding: 0.6rem 1rem; color: #009fb7; font-weight: bold">Dependencies</td>
+            <td style="padding: 0.6rem 1rem">None (stdlib only)</td>
+        </tr>
+    </table>
 </div>
 </div>
         </div>

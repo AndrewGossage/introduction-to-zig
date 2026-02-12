@@ -4,58 +4,56 @@ import "core:fmt"
 import "core:strings"
 
   
-print_body :: proc(snippet: string) -> (string, bool) {
+print_body :: proc(content: string) -> (string, bool) {
 
-    bodySnippet, ok := os.read_entire_file("./static/body.html", context.allocator)
-    if ok != nil {
+    body_bytes, err := os.read_entire_file("./static/body.html", context.allocator)
+    if err != nil {
         fmt.eprintln("Failed to read body")
         return "", false
     }
-    defer delete(bodySnippet)
-    
-    template := string(bodySnippet)
-    
-    result, ok1 := strings.replace_all(template, "{{CONTENT}}", snippet)
-    
-    return result, true
+    defer delete(body_bytes)
+
+    template := string(body_bytes)
+
+    page, _ := strings.replace_all(template, "{{CONTENT}}", content)
+
+    return page, true
 }
 
 print_card :: proc(card: Card) -> (string, bool) {
-    path: string
+    template_path: string
     switch (card.ctype) {
-        case .CODE: path = "./static/code_card.html"
-        case .TEXT: path = "./static/text_card.html"
-        case .HTML: path = "./static/html_card.html"
+        case .CODE: template_path = "./static/code_card.html"
+        case .TEXT: template_path = "./static/text_card.html"
+        case .HTML: template_path = "./static/html_card.html"
     }
-    cardSnippet, ok1 := os.read_entire_file(path, context.allocator)
-    if ok1 != nil {
+    card_bytes, err := os.read_entire_file(template_path, context.allocator)
+    if err != nil {
         fmt.eprintln("Failed to read card")
         return "", false
     }
-    defer delete(cardSnippet)
-    result := string(cardSnippet)
-    
-    result1, ok := strings.replace_all(result, "{{ID}}", card.id)
-    result = result1
-    result, ok = strings.replace_all(result, "{{TITLE}}", card.title)
-    result, ok = strings.replace_all(result, "{{BODY}}", card.body)
+    defer delete(card_bytes)
+    result := string(card_bytes)
+
+    result, _ = strings.replace_all(result, "{{ID}}", card.id)
+    result, _ = strings.replace_all(result, "{{TITLE}}", card.title)
+    result, _ = strings.replace_all(result, "{{BODY}}", card.body)
 
 
     if (card.code_path != nil){
-        ok2 := true
-        snippet, ok := os.read_entire_file(card.code_path.?, context.allocator)
-        defer delete(snippet)
+        content_bytes, read_err := os.read_entire_file(card.code_path.?, context.allocator)
+        defer delete(content_bytes)
 
-        if ok != nil {
+        if read_err != nil {
             fmt.eprintln("Failed to read file")
             fmt.eprintln(card.code_path.?)
 
             return "", false
         }
-        result, ok2 = strings.replace_all(result, "{{CONTENT}}", string(snippet))
+        result, _ = strings.replace_all(result, "{{CONTENT}}", string(content_bytes))
 
-        result, ok2 = strings.replace_all(result, "{{CODE_PATH}}", card.code_path.?)
+        result, _ = strings.replace_all(result, "{{CODE_PATH}}", card.code_path.?)
     }
-    
+
     return result, true
 }

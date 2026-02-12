@@ -19,8 +19,10 @@ Card :: struct {
 }
 
 cards :[]Card: {
-    {.HTML, "intro", "Introduction to Zig", "", "./slides/intro.html"},
-   
+    {.HTML, "intro", "Introduction to Zig 0.16", "A Tour of Zig from Hello World to Metaprogramming", "./slides/intro.html"},
+    {.HTML, "bio", "About the Presenter", "Andrew Gossage", "./slides/bio.html"},
+    {.HTML, "stack", "Tech Stack", "How This Presentation Is Built", "./slides/stack.html"},
+
     // hello world
     {.HTML, "hello0", "Hello World", "And Goodbye Sanity", "./slides/hello.html"},
     {.CODE, "hello", "Hello World", "Minimal Example", "./zig/hello-01.zig"},
