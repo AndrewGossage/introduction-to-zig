@@ -10,7 +10,7 @@
     --ebony: #59594aff;
     font-family: 'Google Sans', monospace;
     font-weight: bold;
-
+    font-size: 1.2rem;
     /* Create a snapping rule on the html element */
     scroll-snap-type: y mandatory;
 
